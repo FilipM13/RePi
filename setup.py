@@ -17,5 +17,5 @@ if __name__ == '__main__':
             exclude=['tests']
         ),
         package_dir={'': 'src'},
-        python_requires='>=3.7, >=3.9'
+        python_requires='>=3.9'
     )

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 if __name__ == '__main__':
     with open("README.md", "r", encoding="utf-8") as fh:
@@ -12,5 +12,6 @@ if __name__ == '__main__':
         long_description=long_description,
         long_description_content_type="text/markdown",
         url='https://github.com/FilipM13/RePi',
-        packages=['RePiCore']
+        packages=find_packages('src'),
+        python_requires='3.7, 3.9'
     )

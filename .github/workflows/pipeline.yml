@@ -1,7 +1,6 @@
 name: RePi Default Workflow
 
-on:
-  - push
+on: [push]
 
 jobs:
 
@@ -9,24 +8,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@master
+      - uses: FilipM13/RePi@main
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
       - name: Format code with black formatter
+        uses: FilipM13/RePi@main
         run: |
-          echo "$PWD"
-          pip install --upgrade pip
-          pip install -r ./requirements_dev.txt
+          pip install -r requirements_dev.txt
           black src
 
   code_quality:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@master
+      - uses: FilipM13/RePi@main
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
@@ -46,8 +46,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@master
+      - uses: FilipM13/RePi@main
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
 
@@ -64,8 +65,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@master
+      - uses: FilipM13/RePi@main
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 

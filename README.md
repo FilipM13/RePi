@@ -1,3 +1,4 @@
+![base](https://github.com/FilipM13/RePi/actions/workflows/base.yaml/badge.svg)
 # RePi
 
 ## High level overview

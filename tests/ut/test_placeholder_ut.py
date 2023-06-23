@@ -1,3 +1,3 @@
 
-def empty_test():
+def test_empty():
   pass

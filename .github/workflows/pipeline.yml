@@ -1,0 +1,33 @@
+name: Octo Organization CI
+
+on:
+  - push
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Format code with black formatter
+        run: flake8 src
+
+  code_quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Quality checks on source code and test
+        run:
+          pip install -r requirements_dev.txt
+          flake8 src
+          flake8 tests
+          mypy src
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Pytest functionalities
+        run:
+          pip install .
+          pip install -r requirements.txt
+          pytest tests

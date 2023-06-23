@@ -13,12 +13,13 @@ Action table:
 1. Repo setup 
 (<a href="https://github.com/FilipM13/RePi/milestone/1">milestone<a/>):
 :arrow_forward:
-   1. creating src and tests directories
-   2. creating mypy configuration
-   3. creating flake8 configuration
+   1. creating src and tests directories :white_check_mark:
+   2. creating mypy configuration :white_check_mark:
+   3. creating flake8 configuration :white_check_mark:
    4. creating pytest configuration
    5. creating black formatting configuration
-   6. creating CI/CD pipelines
+   6. creating project config files (setup.py)
+   7. creating CI/CD pipelines
 2. Developing RePiCore 
 (<a href="https://github.com/FilipM13/RePi/milestone/2">milestone<a/>): 
 :no_entry:

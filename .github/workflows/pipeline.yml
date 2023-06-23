@@ -15,8 +15,7 @@ jobs:
           python-version: '3.9'
 
       - name: Format code with black formatter
-        shell: bash
-        run:
+        run: |
           pip install -r requirements_dev.txt
           black src
 

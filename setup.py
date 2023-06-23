@@ -8,7 +8,7 @@ if __name__ == '__main__':
         name='RePi',
         description='Report Pipeline',
         author='Filip Matejko',
-        version='0.0.0',
+        version='0.1.0',
         long_description=long_description,
         long_description_content_type="text/markdown",
         url='https://github.com/FilipM13/RePi',

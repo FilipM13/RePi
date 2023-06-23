@@ -12,7 +12,7 @@ This project will contain 3 components.
 Action table:
 1. Repo setup 
 (<a href="https://github.com/FilipM13/RePi/milestone/1">milestone<a/>):
-:hammer:
+:white_check_mark:
    1. creating src and tests directories :white_check_mark:
    2. creating mypy configuration :white_check_mark:
    3. creating flake8 configuration :white_check_mark:

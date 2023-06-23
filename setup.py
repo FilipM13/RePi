@@ -12,6 +12,10 @@ if __name__ == '__main__':
         long_description=long_description,
         long_description_content_type="text/markdown",
         url='https://github.com/FilipM13/RePi',
-        packages=find_packages('src'),
+        packages=find_packages(
+            where='src',
+            exclude=['tests']
+        ),
+        package_dir={'': 'src'},
         python_requires='>=3.7, >=3.9'
     )

@@ -2,4 +2,4 @@
 
 ## basic view
 
-<img src="https://github.com/FilipM13/RePi/README/ReportPipeline.jpg">
+<img src="https://github.com/FilipM13/RePi/blob/main/README/ReportPipeline.jpg">

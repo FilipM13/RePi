@@ -25,12 +25,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - uses: FilipM13/RePi@main
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
       - name: Install requirements
+        uses: FilipM13/RePi@main
         run: pip install -r requirements_dev.txt
 
       - name: Check flake8 on source
@@ -47,12 +47,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - uses: FilipM13/RePi@main
       - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
 
       - name: Get requirements
+        uses: FilipM13/RePi@main
         run:
           pip install .
           pip install -r requirements.txt
@@ -66,12 +66,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - uses: FilipM13/RePi@main
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
       - name: Get requirements
+        uses: FilipM13/RePi@main
         run:
           pip install .
           pip install -r requirements.txt

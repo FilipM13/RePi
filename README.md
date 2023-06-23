@@ -23,7 +23,7 @@ Action table:
    7. creating basic CI/CD pipelines :white_check_mark:
 2. Developing RePiCore 
 (<a href="https://github.com/FilipM13/RePi/milestone/2">milestone<a/>): 
-:no_entry:
+:arrow_forward:
    1. basic diagram
    2. creating classes
    3. testing classes

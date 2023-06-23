@@ -1,39 +1,53 @@
-name: Octo Organization CI
+name: RePi Default Workflow
 
 on:
   - push
 
 jobs:
   format:
-    runs-on:
-      os: ubuntu-latest
-      python: 3.7
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
       - name: Format code with black formatter
         run:
           pip install -r requirements_dev.txt
-          flake8 src
+          black src
 
   code_quality:
-    runs-on:
-      os: ubuntu-latest
-      python: 3.7
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Quality checks on source code and test
-        run:
-          pip install -r requirements_dev.txt
-          flake8 src
-          flake8 tests
-          mypy src
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install requirements
+        run: pip install -r requirements_dev.txt
+
+      - name: Check flake8 on source
+        run: flake8 src
+
+      - name: Check flake8 on tests
+        run: flake8 tests
+
+      - name: Check mypy on source
+        run: mypy src
 
   test_37:
-    runs-on:
-      os: ubuntu-latest
-      python: 3.7
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+
       - name: Pytest functionalities
         run:
           pip install .
@@ -41,11 +55,14 @@ jobs:
           pytest tests
 
   test_39:
-    runs-on:
-      os: ubuntu-latest
-      python: 3.9
+    runs-on: ubuntu-latest
 
     steps:
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
       - name: Pytest functionalities
         run:
           pip install .

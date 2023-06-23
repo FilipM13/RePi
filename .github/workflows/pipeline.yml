@@ -9,7 +9,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@master
-      - uses: FilipM13/RePi@main
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'

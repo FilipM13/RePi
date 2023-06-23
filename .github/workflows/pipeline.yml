@@ -16,6 +16,7 @@ jobs:
 
       - name: Format code with black formatter
         run: |
+          ls -a
           pip install -r requirements_dev.txt
           black src
 

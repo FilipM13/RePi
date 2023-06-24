@@ -7,7 +7,7 @@
 
 This project will contain 3 components.
 1. RePiCore - Main Python library responsible for all processing (creating and executing pipeline).
-2. RePiInter - Python library responsible for reading text files and converting them to RePiCore pipeline.
+2. RePiReader - Python library responsible for reading text files and converting them to RePiCore pipeline.
 3. RePiWeb - Django based application (web or desktop) that will provide GUI for creating and executing pipelines.
 
 Action table:

@@ -24,7 +24,7 @@ Action table:
 2. Developing RePiCore 
 (<a href="https://github.com/FilipM13/RePi/milestone/2">milestone<a/>): 
 :arrow_forward:
-   1. basic diagram
+   1. basic diagram :arrow_forward:
    2. creating classes
    3. testing classes
    4. creating sample pipelines

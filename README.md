@@ -55,3 +55,17 @@ Statuses:<br>
 :arrow_forward: - ongoing <br>
 :hammer: - testing <br>
 :white_check_mark: - complete <br>
+
+## RePiCore
+
+### High level overview
+
+<img src="https://github.com/FilipM13/RePi/blob/main/README/RePiCore.jpg">
+
+RePiCore is split into 5 basic layer with 5 interface classe as a base. 
+1. Source interface class for all classes acting as input.
+2. Operation interface class for all classes that will function as data manipulators.
+3. ReportElement interface class for all classes that can be displayed in output file.
+4. Report interface class for all classes responsible for rendering output document.
+5. Package interface class for all classes that allow grouping output documents.
+

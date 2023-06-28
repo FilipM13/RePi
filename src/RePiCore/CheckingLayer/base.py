@@ -1,5 +1,3 @@
-
-
 class ReportElement:
     pass
 

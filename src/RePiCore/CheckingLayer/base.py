@@ -3,6 +3,7 @@
 class ReportElement:
     pass
 
+
 class Plain(ReportElement):
     pass
 

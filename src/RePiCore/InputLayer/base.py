@@ -24,7 +24,9 @@ class Source:
 class SingleValues(Source):
     __base_classes__ = (str, float, int, bool)
 
-    def __init__(self, **dictionary) -> None:
+    def __init__(
+        self, **dictionary: Dict[str, Union[BaseClasses, List[BaseClasses]]]
+    ) -> None:
         # validate attribute
         assert isinstance(dictionary, dict)
         for k, v in dictionary.items():
@@ -38,7 +40,7 @@ class SingleValues(Source):
         # assign attribute
         self.dictionary = dictionary
 
-    def read(self):
+    def read(self) -> None:
         for k, v in self.dictionary.items():
             self.__setattr__(k, v)
         self.__delattr__("dictionary")

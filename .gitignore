@@ -2,3 +2,7 @@
 *.egg-info
 .mypy_cache
 .pytest_cache
+.pytest_cache
+.mypy_cache
+*.pyc
+/build

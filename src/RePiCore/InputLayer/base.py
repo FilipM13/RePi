@@ -1,4 +1,4 @@
-from typing import Union, List, Dict
+from typing import Union, List, Dict, Literal
 
 BaseClasses = Union[str, float, int, bool]
 
@@ -52,3 +52,50 @@ class SingleValues(Source):
 
 class TableLike(Source):
     pass
+
+
+class FromDataBase(TableLike):
+    def __init__(
+        self,
+        db_engine: Literal["postgre", "mysql"],
+        host: str,
+        login: str,
+        password: str,
+        query: str,
+    ):
+        pass
+
+    def read(self) -> None:
+        pass
+
+
+class FromFile(TableLike):
+    def __init__(self, path: str):
+        pass
+
+    def read(self) -> None:
+        super().read()
+
+
+class FromJson(FromFile):
+    def __init__(self, path: str, per_line_regex: str, headers: List[str]):
+        super().__init__(path)
+
+    def read(self) -> None:
+        pass
+
+
+class FromCsv(FromFile):
+    def __init__(self, path: str, delimiter: str):
+        super().__init__(path)
+
+    def read(self) -> None:
+        pass
+
+
+class FromExcel(FromFile):
+    def __init__(self, path: str, sheets: List[str]):
+        super().__init__(path)
+
+    def read(self) -> None:
+        pass

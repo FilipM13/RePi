@@ -5,6 +5,16 @@ import pandas as pd
 BaseClasses = Union[str, float, int, bool]
 
 
+def unpack_nested(nested_list: Union[list, tuple, set]) -> List[BaseClasses]:
+    _l2_ = []
+    for li in nested_list:
+        if isinstance(li, (list, tuple, set)):
+            _l2_.extend(unpack_nested(li))
+        else:
+            _l2_.append(li)
+    return _l2_
+
+
 class Source:
     def __init__(self) -> None:
         """
@@ -83,17 +93,25 @@ class FromFile(TableLike):
 
 
 class FromCsv(FromFile):
-    def __init__(self, path: str, delimiter: str, options: Dict[str, Any]):
+    def __init__(self, path: str, delimiter: str, options: Optional[Dict[str, Any]] = None):
         super().__init__(path)
         assert isinstance(delimiter, str)
-        assert len(delimiter) != 1
+        assert len(delimiter) == 1
+        assert isinstance(options, dict) or (options is None)
+        if isinstance(options, dict):
+            assert all([isinstance(k, str) for k in options.keys()])
         self.delimiter = delimiter
         self.options = options
 
     def read(self) -> None:
-        self.dataframe = pd.read_csv(
-            filepath_or_buffer=self.path, sep=self.delimiter, **self.options
-        )
+        if self.options is not None:
+            self.dataframe = pd.read_csv(  # type: ignore [assignment]
+                filepath_or_buffer=self.path, sep=self.delimiter, **self.options
+            )
+        else:
+            self.dataframe = pd.read_csv(
+                filepath_or_buffer=self.path, sep=self.delimiter
+            )
 
 
 class FromExcel(FromFile):
@@ -123,8 +141,10 @@ class FromJson(FromFile):
             lines = file.readlines()
 
         groups = [re.findall(self.per_line_regex, line) for line in lines]
-        groups = [g.groups() for g in groups]  # type: ignore [attr-defined]
-
-        assert all([len(g) == len(self.headers) for g in groups])
-
+        groups = [unpack_nested(g) for g in groups]
+        assert all([len(g) <= len(self.headers) for g in groups])
+        groups = [
+            g + [None for _ in range(len(self.headers) - len(g))]
+            for g in groups
+        ]
         self.dataframe = pd.DataFrame(data=groups, columns=self.headers)

@@ -93,7 +93,9 @@ class FromFile(TableLike):
 
 
 class FromCsv(FromFile):
-    def __init__(self, path: str, delimiter: str, options: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self, path: str, delimiter: str, options: Optional[Dict[str, Any]] = None
+    ):
         super().__init__(path)
         assert isinstance(delimiter, str)
         assert len(delimiter) == 1
@@ -143,8 +145,5 @@ class FromJson(FromFile):
         groups = [re.findall(self.per_line_regex, line) for line in lines]
         groups = [unpack_nested(g) for g in groups]
         assert all([len(g) <= len(self.headers) for g in groups])
-        groups = [
-            g + [None for _ in range(len(self.headers) - len(g))]
-            for g in groups
-        ]
+        groups = [g + [None for _ in range(len(self.headers) - len(g))] for g in groups]
         self.dataframe = pd.DataFrame(data=groups, columns=self.headers)

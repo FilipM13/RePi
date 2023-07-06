@@ -35,4 +35,4 @@ def test_read(d):
 def test_get_attributes(d):
     o = SingleValues(**d)
     o.read()
-    o.get_attributes()
+    o.get_values()

@@ -36,9 +36,7 @@ class Source:
 class SingleValues(Source):
     __base_classes__ = (str, float, int, bool)
 
-    def __init__(
-        self, **dictionary: Dict[str, Union[BaseClasses, List[BaseClasses]]]
-    ) -> None:
+    def __init__(self, **dictionary: Union[BaseClasses, List[BaseClasses]]) -> None:
         # validate attribute
         assert isinstance(dictionary, dict)
         for k, v in dictionary.items():
@@ -57,13 +55,17 @@ class SingleValues(Source):
             self.__setattr__(k, v)
         self.__delattr__("dictionary")
 
-    def get_attributes(self) -> Dict[str, Union[BaseClasses, List[BaseClasses]]]:
+    def get_values(self) -> Dict[str, Union[BaseClasses, List[BaseClasses]]]:
         attributes = self.__dict__
         return attributes
 
 
 class TableLike(Source):
-    pass
+    def __init__(self, dataframe: pd.DataFrame = pd.DataFrame()):
+        self.dataframe = dataframe
+
+    def get_data(self) -> pd.DataFrame:
+        return self.dataframe
 
 
 class FromDataBase(TableLike):
@@ -75,6 +77,7 @@ class FromDataBase(TableLike):
         password: str,
         query: str,
     ):
+        super().__init__()
         pass
 
     def read(self) -> None:
@@ -83,7 +86,7 @@ class FromDataBase(TableLike):
 
 class FromFile(TableLike):
     def __init__(self, path: str):
-        self.dataframe: Optional[pd.DataFrame] = None
+        super().__init__()
         assert isinstance(path, str)
         assert path != ""
         self.path = path

@@ -42,8 +42,33 @@ class Filter(Operation):
         return TableLike(return_df)
 
 
-class ChangeMatrix(Operation):
-    pass
+class ColumnCompareMatrix(Operation):
+    def __init__(self, data: TableLike, column1: str, column2: str):
+        assert isinstance(data, TableLike)
+        assert isinstance(column1, str)
+        assert column1 in data.dataframe.columns
+        assert isinstance(column2, str)
+        assert column2 in data.dataframe.columns
+        self.data = data
+        self.column1 = column1
+        self.column2 = column2
+
+    def execute(self) -> TableLike:
+        unique1 = list(self.data.dataframe[self.column1].unique())
+        unique2 = list(self.data.dataframe[self.column2].unique())
+        unique = [*unique1, *unique2]
+        rv_records: Dict[str, Dict[str, int]] = dict()
+        for u1 in unique:
+            rv_records[u1] = dict()
+            for u2 in unique:
+                count = self.data.dataframe.loc[
+                    (self.data.dataframe[self.column1] == u1)
+                    & (self.data.dataframe[self.column2] == u2)
+                ].shape[0]
+                rv_records[u1][u2] = count
+        rv_df = pd.DataFrame(rv_records)
+        rv = TableLike(rv_df)
+        return rv
 
 
 class Stack(Operation):

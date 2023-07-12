@@ -1,4 +1,4 @@
-from typing import Dict, Callable, Any
+from typing import Dict, Callable, Any, Literal, List
 import pandas as pd
 
 from RePiCore.InputLayer.base import TableLike, SingleValues
@@ -56,11 +56,10 @@ class ColumnCompareMatrix(Operation):
     def execute(self) -> TableLike:
         unique1 = list(self.data.dataframe[self.column1].unique())
         unique2 = list(self.data.dataframe[self.column2].unique())
-        unique = [*unique1, *unique2]
         rv_records: Dict[str, Dict[str, int]] = dict()
-        for u1 in unique:
+        for u1 in unique1:
             rv_records[u1] = dict()
-            for u2 in unique:
+            for u2 in unique2:
                 count = self.data.dataframe.loc[
                     (self.data.dataframe[self.column1] == u1)
                     & (self.data.dataframe[self.column2] == u2)
@@ -72,11 +71,35 @@ class ColumnCompareMatrix(Operation):
 
 
 class Stack(Operation):
-    pass
+
+    def __init__(self, data: List[TableLike]):
+        assert all([isinstance(d, TableLike) for d in data])
+        self.data = data
+
+    def execute(self) -> TableLike:
+        rv_df = pd.concat([*[d.dataframe for d in self.data]], ignore_index=True, axis=0)
+        rv = TableLike(rv_df)
+        return rv
 
 
 class Merge(Operation):
-    pass
+
+    def __init__(self, data1: TableLike, data2: TableLike, on: str, how: Literal["inner", "outer", "left", "right", "cross"]):
+        assert isinstance(data1, TableLike)
+        assert isinstance(data2, TableLike)
+        assert isinstance(on, str)
+        assert how in ['inner', 'outer', 'left', 'right', 'cross']
+        if how == 'cross':
+            on = None
+        self.data1 = data1
+        self.data2 = data2
+        self.on = on
+        self.how = how
+
+    def execute(self) -> TableLike:
+        rv_df = self.data1.dataframe.merge(self.data2.dataframe, how=self.how, on=self.on)
+        rv = TableLike(rv_df)
+        return rv
 
 
 class CountOver(Operation):

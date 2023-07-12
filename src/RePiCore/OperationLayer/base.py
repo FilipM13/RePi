@@ -110,8 +110,19 @@ class Merge(Operation):
         return rv
 
 
-class CountOver(Operation):
-    pass
+class CountValues(Operation):
+    def __init__(self, data: TableLike, column: str):
+        assert isinstance(data, TableLike)
+        assert isinstance(column, str)
+        assert column in data.dataframe.columns
+        self.data = data
+        self.column = column
+
+    def execute(self) -> TableLike:
+        rv_s = self.data.dataframe[self.column].value_counts()
+        rv_df = pd.DataFrame(rv_s)
+        rv = TableLike(rv_df)
+        return rv
 
 
 class ColumnTransform(Operation):

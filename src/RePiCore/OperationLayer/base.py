@@ -1,4 +1,4 @@
-from typing import Dict, Callable, Any, Literal, List
+from typing import Dict, Callable, Any, Literal, List, Optional
 import pandas as pd
 
 from RePiCore.InputLayer.base import TableLike, SingleValues
@@ -71,25 +71,31 @@ class ColumnCompareMatrix(Operation):
 
 
 class Stack(Operation):
-
     def __init__(self, data: List[TableLike]):
         assert all([isinstance(d, TableLike) for d in data])
         self.data = data
 
     def execute(self) -> TableLike:
-        rv_df = pd.concat([*[d.dataframe for d in self.data]], ignore_index=True, axis=0)
+        rv_df = pd.concat(
+            [*[d.dataframe for d in self.data]], ignore_index=True, axis=0
+        )
         rv = TableLike(rv_df)
         return rv
 
 
 class Merge(Operation):
-
-    def __init__(self, data1: TableLike, data2: TableLike, on: str, how: Literal["inner", "outer", "left", "right", "cross"]):
+    def __init__(
+        self,
+        data1: TableLike,
+        data2: TableLike,
+        how: Literal["inner", "outer", "left", "right", "cross"],
+        on: Optional[str] = None,
+    ):
         assert isinstance(data1, TableLike)
         assert isinstance(data2, TableLike)
-        assert isinstance(on, str)
-        assert how in ['inner', 'outer', 'left', 'right', 'cross']
-        if how == 'cross':
+        assert isinstance(on, str) or (on is None)
+        assert how in ["inner", "outer", "left", "right", "cross"]
+        if how == "cross":
             on = None
         self.data1 = data1
         self.data2 = data2
@@ -97,7 +103,9 @@ class Merge(Operation):
         self.how = how
 
     def execute(self) -> TableLike:
-        rv_df = self.data1.dataframe.merge(self.data2.dataframe, how=self.how, on=self.on)
+        rv_df = self.data1.dataframe.merge(
+            self.data2.dataframe, how=self.how, on=self.on
+        )
         rv = TableLike(rv_df)
         return rv
 

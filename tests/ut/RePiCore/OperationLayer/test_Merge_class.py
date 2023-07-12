@@ -26,7 +26,8 @@ test_cases = {
         (t1, t2, 'col2', 'right'),
         (t1, t2, 'col1', 'inner'),
         (t1, t2, 'col2', 'outer'),
-        (t1, t2, 'col1', 'cross')
+        (t1, t2, 'col1', 'cross'),
+        (t1, t2, None, 'cross'),
     ]
 }
 

@@ -138,8 +138,5 @@ class Size(Operation):
         shape = self.data.dataframe.shape
         rows = shape[0]
         columns = shape[1]
-        rv = {
-            "rows": rows,
-            "columns": columns
-        }
+        rv = {"rows": rows, "columns": columns}
         return rv  # type: ignore [return-value]

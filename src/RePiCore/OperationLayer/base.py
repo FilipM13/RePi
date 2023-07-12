@@ -130,4 +130,16 @@ class ColumnTransform(Operation):
 
 
 class Size(Operation):
-    pass
+    def __init__(self, data: TableLike):
+        assert isinstance(data, TableLike)
+        self.data = data
+
+    def execute(self) -> Dict[Literal["rows", "columns"], int]:
+        shape = self.data.dataframe.shape
+        rows = shape[0]
+        columns = shape[1]
+        rv = {
+            "rows": rows,
+            "columns": columns
+        }
+        return rv  # type: ignore [return-value]

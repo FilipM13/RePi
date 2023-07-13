@@ -1,29 +1,8 @@
-from typing import Literal, Any, List, Optional, Dict
+from typing import Literal, Any, List, Optional
 import re
 
 from RePiCore.InputLayer.base import TableLike
-
-
-class Status:
-    def __init__(self, name: str, code: int, rgba_color: str, description: str):
-        assert isinstance(name, str)
-        assert isinstance(code, int)
-        assert isinstance(rgba_color, str)
-        rgba_color = re.sub(r"\s", "", rgba_color)
-        assert re.fullmatch(
-            r"\(\d{1,3},\d{1,3},\d{1,3},\d(?:\.\d*)?\)", rgba_color
-        ), f"The rgba_color must match pattern (ddd,ddd,ddd,d.d) where d is digit, instead got {rgba_color}."
-        assert isinstance(description, str)
-
-        self.name = name
-        self.code = code
-        self.rgba_color = rgba_color
-        self.description = description
-
-
-Fail = Status("FAIL", -1, "(255, 0, 0, 1)", "Check failed.")
-Neutral = Status("NEUTRAL", 0, "(0, 0, 255, 1)", "Check with status neutral.")
-Pass = Status("PASS", -1, "(0, 255, 0, 1)", "Check passed.")
+from .addons import Pass, Fail, Neutral, Object
 
 
 class ReportElement:
@@ -163,16 +142,14 @@ class Table(ReportElement):
 
 
 class Graphical(ReportElement):
+    def __init__(self) -> None:
+        self.id = id(self)
+        self.report_object: Optional[Object] = None
+
     def create_object(self) -> None:
         raise NotImplementedError(
             f"Method create_object not implemented in class {self.__class__}."
         )
-
-
-class Object:
-    def __init__(self, **kwargs: Dict[str, Any]):
-        for k, v in kwargs.items():
-            self.__setattr__(k, v)
 
 
 class Histogram(ReportElement):
@@ -183,6 +160,7 @@ class Histogram(ReportElement):
         n_bins: int,
         colors: Optional[List[str]] = None,
     ):
+        super().__init__()
         assert isinstance(data, TableLike)
         assert isinstance(series, list)
         assert all([isinstance(s, str) for s in series])
@@ -203,8 +181,6 @@ class Histogram(ReportElement):
         self.series = series
         self.colors = colors
         self.n_bins = n_bins
-        self.id = id(self)
-        self.report_object = None
 
     def create_object(self) -> None:
         pass
@@ -214,6 +190,7 @@ class ScatterPlot(ReportElement):
     def __init__(
         self, data: TableLike, series: List[str], colors: Optional[List[str]] = None
     ):
+        super().__init__()
         assert isinstance(data, TableLike)
         assert isinstance(series, list)
         assert all([isinstance(s, tuple) for s in series])
@@ -234,8 +211,6 @@ class ScatterPlot(ReportElement):
         self.data = data
         self.series = series
         self.colors = colors
-        self.id = id(self)
-        self.report_object = None
 
     def create_object(self) -> None:
         pass

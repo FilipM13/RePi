@@ -35,6 +35,6 @@ def test_init(name, checked_value, max_value, min_value, description, max_inclus
     test_cases['arguments'],
     test_cases['cases']
 )
-def test_init(name, checked_value, max_value, min_value, description, max_inclusive, max_exclusive):
+def test_check(name, checked_value, max_value, min_value, description, max_inclusive, max_exclusive):
     o = InRange(name, checked_value, max_value, min_value, description, max_inclusive, max_exclusive)
     o.check()

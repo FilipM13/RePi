@@ -147,7 +147,7 @@ class Graphical(ReportElement):
         self.id = id(self)
         self.report_object: Optional[Object] = None
 
-    def create_object(self) -> None:
+    def create_element(self) -> None:
         raise NotImplementedError(
             f"Method create_object not implemented in class {self.__class__}."
         )
@@ -183,7 +183,7 @@ class Histogram(ReportElement):
         self.colors = colors
         self.n_bins = n_bins
 
-    def create_object(self) -> None:
+    def create_element(self) -> None:
         pass
 
 
@@ -213,5 +213,5 @@ class ScatterPlot(ReportElement):
         self.series = series
         self.colors = colors
 
-    def create_object(self) -> None:
+    def create_element(self) -> None:
         pass

@@ -12,13 +12,6 @@ class ReportElement:
         )
 
 
-class WithCheck(ReportElement):
-    def check(self) -> None:
-        raise NotImplementedError(
-            f"Method check not implemented in class {self.__class__}."
-        )
-
-
 class Plain(ReportElement):
     ALLOWED_TAGS = ["h3", "h2", "h1", "p"]
 
@@ -30,18 +23,32 @@ class Plain(ReportElement):
         self.tag = tag
 
 
+class WithCheck(ReportElement):
+    def __init__(self, name: str, description: Optional[str]):
+        assert isinstance(name, str)
+        assert name != ""
+        assert isinstance(description, str) or (description is None)
+
+        self.name = name
+        self.description = description
+        self.status = Neutral
+
+    def check(self) -> None:
+        raise NotImplementedError(
+            f"Method check not implemented in class {self.__class__}."
+        )
+
+
 class Equals(WithCheck):
     def __init__(
         self, name: str, checked_value: Any, expected_value: Any, description: str
     ):
+        super().__init__(name, description)
         assert isinstance(name, str)
         assert isinstance(description, str)
 
-        self.name = name
         self.checked_value = checked_value
         self.expected_value = expected_value
-        self.description = description
-        self.status = Neutral
 
     def check(self) -> None:
         if self.checked_value == self.expected_value:
@@ -61,23 +68,19 @@ class InRange(WithCheck):
         max_inclusive: bool = True,
         min_inclusive: bool = True,
     ):
-        assert isinstance(name, str)
+        super().__init__(name, description)
         assert isinstance(checked_value, (float, int))
         assert isinstance(max_value, (float, int))
         assert isinstance(min_value, (float, int))
         assert max_value > min_value
-        assert isinstance(description, str)
         assert isinstance(max_inclusive, bool)
         assert isinstance(min_inclusive, bool)
 
-        self.name = name
         self.checked_value = checked_value
         self.max_value = max_value
         self.min_value = min_value
-        self.description = description
         self.max_inclusive = max_inclusive
         self.min_inclusive = min_inclusive
-        self.status = Neutral
 
     def check(self) -> None:
         mx = None

@@ -44,8 +44,6 @@ class Equals(WithCheck):
         self, name: str, checked_value: Any, expected_value: Any, description: str
     ):
         super().__init__(name, description)
-        assert isinstance(name, str)
-        assert isinstance(description, str)
 
         self.checked_value = checked_value
         self.expected_value = expected_value

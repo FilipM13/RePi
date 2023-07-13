@@ -1,4 +1,4 @@
-from typing import Dict, Callable, Any, Literal, List, Optional
+from typing import Dict, Callable, Any, Literal, List, Optional, Union
 import pandas as pd
 
 from RePiCore.InputLayer.base import TableLike, SingleValues
@@ -126,8 +126,78 @@ class CountValues(Operation):
 
 
 class ColumnTransform(Operation):
-    pass
 
+    def __init__(
+        self,
+        data: TableLike
+    ):
+        assert isinstance(data, TableLike)
+        self.data = data
+
+
+class Rename(ColumnTransform):
+    def __init__(self, data: TableLike, names: Dict[str, str]):
+        super().__init__(data=data)
+        assert isinstance(names, dict)
+        assert len(names.items()) > 0
+        assert all([isinstance(k, str) for k in names.keys()])
+        assert all([isinstance(v, str) for v in names.values()])
+        assert all([v in self.data.dataframe.columns for v in names.values()])
+        self.names = names
+
+    def execute(self) -> TableLike:
+        df = self.data.dataframe.rename(columns=self.names)
+        rv = TableLike(df)
+        return rv
+
+
+class Drop(ColumnTransform):
+    def __init__(self, data: TableLike, names: List[str]):
+        super().__init__(data=data)
+        assert isinstance(names, list)
+        assert len(names) > 0
+        assert all([isinstance(v, str) for v in names])
+        assert all([v in self.data.dataframe.columns for v in names])
+        self.names = names
+
+    def execute(self) -> TableLike:
+        df = self.data.dataframe.drop(columns=self.names)
+        rv = TableLike(df)
+        return rv
+
+
+class Order(ColumnTransform):
+    def __init__(self, data: TableLike, names: List[str]):
+        super().__init__(data=data)
+        assert isinstance(names, list)
+        assert len(names) > 0
+        assert all([isinstance(v, str) for v in names])
+        assert all([v in self.data.dataframe.columns for v in names])
+        self.names = names
+
+    def execute(self) -> TableLike:
+        cols = list(self.data.dataframe.columns)
+        for n in self.names:
+            cols.remove(n)
+        self.names.extend(cols)
+        df = self.data.dataframe[self.names]
+        rv = TableLike(df)
+        return rv
+
+
+class Maintain(ColumnTransform):
+    def __init__(self, data: TableLike, names):
+        super().__init__(data=data)
+        assert isinstance(names, list)
+        assert len(names) > 0
+        assert all([isinstance(v, str) for v in names])
+        assert all([v in self.data.dataframe.columns for v in names])
+        self.names = names
+
+    def execute(self) -> TableLike:
+        df = self.data.dataframe[self.names]
+        rv = TableLike(df)
+        return rv
 
 class Size(Operation):
     def __init__(self, data: TableLike):

@@ -1,4 +1,4 @@
-from typing import Dict, Callable, Any, Literal, List, Optional, Union
+from typing import Dict, Callable, Any, Literal, List, Optional
 import pandas as pd
 
 from RePiCore.InputLayer.base import TableLike, SingleValues
@@ -126,11 +126,7 @@ class CountValues(Operation):
 
 
 class ColumnTransform(Operation):
-
-    def __init__(
-        self,
-        data: TableLike
-    ):
+    def __init__(self, data: TableLike):
         assert isinstance(data, TableLike)
         self.data = data
 
@@ -186,7 +182,7 @@ class Order(ColumnTransform):
 
 
 class Maintain(ColumnTransform):
-    def __init__(self, data: TableLike, names):
+    def __init__(self, data: TableLike, names: List[str]):
         super().__init__(data=data)
         assert isinstance(names, list)
         assert len(names) > 0
@@ -198,6 +194,7 @@ class Maintain(ColumnTransform):
         df = self.data.dataframe[self.names]
         rv = TableLike(df)
         return rv
+
 
 class Size(Operation):
     def __init__(self, data: TableLike):

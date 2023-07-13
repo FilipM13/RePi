@@ -23,3 +23,12 @@ test_cases = {
 )
 def test_init(name, checked_value, expected_value, description):
     Equals(name, checked_value, expected_value, description)
+
+
+@pytest.mark.parametrize(
+    test_cases['arguments'],
+    test_cases['cases']
+)
+def test_check(name, checked_value, expected_value, description):
+    o = Equals(name, checked_value, expected_value, description)
+    o.check()

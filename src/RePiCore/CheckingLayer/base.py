@@ -15,9 +15,9 @@ class ReportElement:
 
     def render(self) -> str:
         assert self.render_object is not None
-        template = Environment(loader=BaseLoader()).from_string(self.render_template)  # type: ignore [arg-type]
+        template = Environment(loader=BaseLoader()).from_string(self.render_template)
         rv = template.render(object=self.render_object)
-        return rv
+        return rv  # type: ignore [no-any-return]
 
 
 class Plain(ReportElement):

@@ -25,7 +25,11 @@ test_cases = {
     test_cases['cases']
 )
 def test_init(data, series, colors):
-    Histogram(data, series, colors)
+    Histogram(
+        data=data,
+        series=series,
+        colors=colors
+    )
 
 
 @pytest.mark.parametrize(
@@ -33,5 +37,22 @@ def test_init(data, series, colors):
     test_cases['cases']
 )
 def test_create_element(data, series, colors):
-    o = Histogram(data, series, colors)
+    o = Histogram(
+        data=data,
+        series=series,
+        colors=colors
+    )
     o.create_element()
+
+
+@pytest.mark.parametrize(
+    test_cases['arguments'],
+    test_cases['cases']
+)
+def test_render(data, series, colors):
+    o = Histogram(
+        data=data,
+        series=series,
+        colors=colors
+    )
+    o.render()

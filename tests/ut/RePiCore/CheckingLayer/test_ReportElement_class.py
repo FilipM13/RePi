@@ -1,7 +1,18 @@
 import pytest
 from RePiCore.CheckingLayer.base import ReportElement
 
+test_cases = {
+    'arguments': 'template',
+    'cases': [
+        ('aa'),
+        (None),
+    ]
+}
 
-def test_init():
-    with pytest.raises(NotImplementedError):
-        ReportElement()
+
+@pytest.mark.parametrize(
+    test_cases['arguments'],
+    test_cases['cases']
+)
+def test_init(template):
+    ReportElement(template)

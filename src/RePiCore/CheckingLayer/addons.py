@@ -1,9 +1,9 @@
-from typing import Dict, Any
+from typing import Any
 import re
 
 
 class Object:
-    def __init__(self, **kwargs: Dict[str, Any]):
+    def __init__(self, **kwargs: Any):
         for k, v in kwargs.items():
             self.__setattr__(k, v)
 

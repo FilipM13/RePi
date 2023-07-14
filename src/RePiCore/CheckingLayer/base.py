@@ -153,12 +153,11 @@ class Graphical(ReportElement):
         )
 
 
-class Histogram(ReportElement):
+class Histogram(Graphical):
     def __init__(
         self,
         data: TableLike,
         series: List[str],
-        n_bins: int,
         colors: Optional[List[str]] = None,
     ):
         super().__init__()
@@ -166,9 +165,7 @@ class Histogram(ReportElement):
         assert isinstance(series, list)
         assert all([isinstance(s, str) for s in series])
         assert all([s in data.dataframe.columns for s in series])
-        assert isinstance(n_bins, int)
-        assert n_bins > 0
-        if colors is not NotInRange:
+        if colors is not None:
             assert isinstance(colors, list)
             assert len(colors) == len(series)
             assert all([isinstance(c, str) for c in colors])
@@ -181,13 +178,19 @@ class Histogram(ReportElement):
         self.data = data
         self.series = series
         self.colors = colors
-        self.n_bins = n_bins
 
     def create_element(self) -> None:
-        pass
+        self.report_object = Object(id=self.id, series=[])
+        for ser in self.series:
+            _s_ = Object(
+                name=ser, x=str(list(self.data.dataframe[ser])), type="histogram"
+            )
+            if self.colors is not None:
+                _s_.__setattr__("color", self.colors.pop())
+            self.report_object.series.append(_s_)  # type: ignore [attr-defined]
 
 
-class ScatterPlot(ReportElement):
+class ScatterPlot(Graphical):
     def __init__(
         self, data: TableLike, series: List[str], colors: Optional[List[str]] = None
     ):
@@ -199,7 +202,7 @@ class ScatterPlot(ReportElement):
             assert len(ser) == 2
             assert all([isinstance(s, str) for s in ser])
         assert all([s in data.dataframe.columns for s in series])
-        if colors is not NotInRange:
+        if colors is not None:
             assert isinstance(colors, list)
             assert len(colors) == len(series)
             assert all([isinstance(c, str) for c in colors])

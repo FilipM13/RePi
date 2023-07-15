@@ -25,7 +25,7 @@ Action table:
 (<a href="https://github.com/FilipM13/RePi/milestone/2">milestone<a/>): 
 :arrow_forward:
    1. basic diagram :white_check_mark:
-   2. creating classes :arrow_forward: :hammer:
+   2. creating classes :hammer:
    3. testing classes :arrow_forward:
    4. creating sample pipelines
    5. testing pipelines

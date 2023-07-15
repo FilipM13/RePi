@@ -22,15 +22,17 @@ HISTOGRAM = """
     target = document.getElementById('{{object.id}}');
 
     data = [
-    {% set series = object.series %}
-    {% for ser in series %}
+    {%- set series = object.series %}
+    {%- for ser in series %}
         {
             x: {{ser.x}},
             name: "{{ser.name}}",
             type: "histogram",
-            {% if 'color' in ser %} marker: {color: "rgba{{ser.color}}"},{% endif %}
+            {%- if 'color' in ser %}
+            marker: {color: "rgba{{ser.color}}"},
+            {%- endif %}
         },
-    {% endfor %}
+    {%- endfor %}
     ]
 
     layout = {
@@ -47,16 +49,16 @@ SCATTERPLOT = """
     target = document.getElementById("{{object.id}}");
 
     data = [
-    {% for ser in object.series %}
+    {%- for ser in object.series %}
         {
             x: {{ser.x}},
             y: {{ser.y}},
             name: "{{ser.name}}",
             mode: "markers",
             type: "scatter",
-            {% if 'color' in ser %} marker: {color: "rgba{{ser.color}}"}, {% endif %}
+            {%- if 'color' in ser %} marker: {color: "rgba{{ser.color}}"}, {% endif %}
         },
-    {% endfor %}
+    {%- endfor %}
     ]
 
     Plotly.newPlot(target, data);

@@ -1,6 +1,7 @@
 from typing import List, Optional
 from jinja2 import Environment, BaseLoader
 import pandas as pd
+from bs4 import BeautifulSoup as bs
 
 from RePiCore.CheckingLayer.base import ReportElement
 from RePiCore.InputLayer.base import TableLike
@@ -42,7 +43,7 @@ class HtmlFile(Report):
         self.report_elements = report_elements
 
     def generate(self) -> None:
-        html_elements = [re.render() for re in self.report_elements]
+        html_elements = [reel.render() for reel in self.report_elements]
         template = Environment(loader=BaseLoader()).from_string(self.render_template)
         report_content = template.render(
             TITLE=self.file_name.removesuffix(".html"),
@@ -51,6 +52,7 @@ class HtmlFile(Report):
             HEAD_INCLUDE=self.head_include,
             REPORT_ELEMENTS=html_elements,
         )
+        report_content = bs(report_content, "html.parser").prettify()
         with open(self.file_name, "w") as f:
             f.write(report_content)
 

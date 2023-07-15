@@ -46,6 +46,9 @@ test_cases = {
     'cases': [
         ('test.html', [
             checks.Plain(text='test test', tag='h1'),
+            checks.Plain(text='test test', tag='h2'),
+            checks.Plain(text='test test', tag='h3'),
+            checks.Plain(text='test test', tag='p'),
             checks.Equals('test equals', 1, 1, 'checks if equals 1'),
             checks.InRange('test in range', 5, 6, 0, 'checks if in <0, 6>'),
             checks.NotInRange('test not in range', 5, 6, 0, 'checks if not in <0, 6>'),

@@ -60,7 +60,7 @@ class ExcelFile(Report):
         self,
         file_name: str,
         tables: List[TableLike],
-        sheet_names: Optional[List[str]] = None
+        sheet_names: Optional[List[str]] = None,
     ) -> None:
         assert isinstance(file_name, str)
         assert file_name.endswith(".xlsx")
@@ -76,12 +76,13 @@ class ExcelFile(Report):
         self.sheet_names = sheet_names
 
     def generate(self) -> None:
-        writer = pd.ExcelWriter(self.file_name, engine='xlsxwriter')
+        writer = pd.ExcelWriter(self.file_name, engine="xlsxwriter")
         for i, table in enumerate(self.tables):
-            sheet_name = self.sheet_names[i] if self.sheet_names is not None else f"sheet{i}"
+            sheet_name = (
+                self.sheet_names[i] if self.sheet_names is not None else f"sheet{i}"
+            )
             table.dataframe.to_excel(writer, sheet_name=sheet_name)
         writer.close()
-
 
 
 class CsvFile(Report):

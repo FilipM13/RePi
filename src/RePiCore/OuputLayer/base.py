@@ -1,7 +1,9 @@
-from typing import List
+from typing import List, Optional
 from jinja2 import Environment, BaseLoader
+import pandas as pd
 
 from RePiCore.CheckingLayer.base import ReportElement
+from RePiCore.InputLayer.base import TableLike
 
 from .addons import DEFAULT_CSS, DEFAULT_JS, HEAD_INCLUDE
 from .templates import DEFAULT_HTML
@@ -54,12 +56,63 @@ class HtmlFile(Report):
 
 
 class ExcelFile(Report):
-    pass
+    def __init__(
+        self,
+        file_name: str,
+        tables: List[TableLike],
+        sheet_names: Optional[List[str]] = None
+    ) -> None:
+        assert isinstance(file_name, str)
+        assert file_name.endswith(".xlsx")
+        assert isinstance(tables, list)
+        assert all([isinstance(tab, TableLike) for tab in tables])
+        if sheet_names is not None:
+            assert isinstance(sheet_names, list)
+            assert all([isinstance(name, str) for name in sheet_names])
+            assert len(tables) == len(sheet_names)
+
+        self.file_name = file_name
+        self.tables = tables
+        self.sheet_names = sheet_names
+
+    def generate(self) -> None:
+        writer = pd.ExcelWriter(self.file_name, engine='xlsxwriter')
+        for i, table in enumerate(self.tables):
+            sheet_name = self.sheet_names[i] if self.sheet_names is not None else f"sheet{i}"
+            table.dataframe.to_excel(writer, sheet_name=sheet_name)
+        writer.close()
+
 
 
 class CsvFile(Report):
-    pass
+    def __init__(
+        self,
+        file_name: str,
+        table: TableLike,
+    ) -> None:
+        assert isinstance(file_name, str)
+        assert file_name.endswith(".csv")
+        assert isinstance(table, TableLike)
+
+        self.file_name = file_name
+        self.table = table
+
+    def generate(self) -> None:
+        self.table.dataframe.to_csv(self.file_name)
 
 
 class JsonFile(Report):
-    pass
+    def __init__(
+        self,
+        file_name: str,
+        table: TableLike,
+    ) -> None:
+        assert isinstance(file_name, str)
+        assert file_name.endswith(".json")
+        assert isinstance(table, TableLike)
+
+        self.file_name = file_name
+        self.table = table
+
+    def generate(self) -> None:
+        self.table.dataframe.to_json(self.file_name)

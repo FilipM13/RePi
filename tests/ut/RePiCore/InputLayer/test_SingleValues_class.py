@@ -26,13 +26,3 @@ def test_init(d):
 def test_read(d):
     o = SingleValues(**d)
     o.read()
-
-
-@pytest.mark.parametrize(
-    test_cases['arguments'],
-    test_cases['cases']
-)
-def test_get_attributes(d):
-    o = SingleValues(**d)
-    o.read()
-    o.get_values()

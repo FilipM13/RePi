@@ -4,15 +4,16 @@ import os
 
 from RePiCore.OuputLayer.base import JsonFile
 from RePiCore.InputLayer.base import TableLike
+from RePiCore.CheckingLayer.base import Table
 
 
-scatter = TableLike(pd.DataFrame(
+scatter = Table(TableLike(pd.DataFrame(
     {
         'x data': [0, 0, 9, 9, 6, 6],
         'y data 1': [1, 2, 3, 4, 5, 6],
         'y data 2': [6, 5, 4, 3, 2, 1],
     }
-))
+)))
 
 
 test_cases = {

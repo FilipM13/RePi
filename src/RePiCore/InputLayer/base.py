@@ -17,17 +17,11 @@ def unpack_nested(nested_list: Union[list, tuple, set]) -> List[BaseClasses]:
 
 class Source:
     def __init__(self) -> None:
-        """
-        Do not use. Only overwrite.
-        """
         raise NotImplementedError(
             f"Method __init__ not implemented in {self.__class__.__name__}"
         )
 
     def read(self) -> None:
-        """
-        Do not use. Only overwrite.
-        """
         raise NotImplementedError(
             f"Method read not implemented in {self.__class__.__name__}"
         )
@@ -54,10 +48,6 @@ class SingleValues(Source):
         for k, v in self.dictionary.items():
             self.__setattr__(k, v)
         self.__delattr__("dictionary")
-
-    def get_values(self) -> Dict[str, Union[BaseClasses, List[BaseClasses]]]:
-        attributes = self.__dict__
-        return attributes
 
 
 class TableLike(Source):
@@ -97,7 +87,7 @@ class FromFile(TableLike):
 
 class FromCsv(FromFile):
     def __init__(
-        self, path: str, delimiter: str, options: Optional[Dict[str, Any]] = None
+        self, path: str, delimiter: str = ",", options: Optional[Dict[str, Any]] = None
     ):
         super().__init__(path)
         assert isinstance(delimiter, str)

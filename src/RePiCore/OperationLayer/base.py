@@ -25,7 +25,7 @@ class Filter(Operation):
     ):
         assert isinstance(data, TableLike)
         assert isinstance(values, SingleValues)
-        assert all([k in data.get_data().columns for k in filters.keys()])
+        assert all([k in data.dataframe.columns for k in filters.keys()])
         self.data = data
         self.values = values
         self.filters = filters

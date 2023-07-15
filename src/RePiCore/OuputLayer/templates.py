@@ -9,6 +9,7 @@ DEFAULT_HTML = """
     {{HEAD_INCLUDE}}
 </head>
 <body>
+    <h1 class="title">{{TITLE}}</>
     {% for RE in REPORT_ELEMENTS %}
         {{RE}}
     {% endfor %}

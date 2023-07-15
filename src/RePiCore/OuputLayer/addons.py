@@ -13,10 +13,22 @@ DEFAULT_CSS = """
 
         font-size: 12;
         font-family: 'Lucida Console';
-        padding: 20px
+        padding: 20px;
+        background: white;
     }
-    html {
+    body {
+        padding: 10px;
+        width: 297mm;
+        margin-left: auto;
+        margin-right: auto;
+        border-style: solid;
         background: var(--background-color);
+        border-style: solid;
+        border-color: var(--border-color);
+    }
+    .title {
+        text-align: center;
+        border-bottom: solid 3px var(--border-color);
     }
     .NEUTRAL {
         padding: 4px;
@@ -35,29 +47,31 @@ DEFAULT_CSS = """
     }
     .table_container{
         margin-top: 10px;
-        max-width: 50vw;
-        max-height: 50vh;
+        max-width: 100%;
+        max-height: 100%;
     }
     .graph_container{
         padding: 10px;
         margin-top: 10px;
         background: var(--container-color);
-        max-width: 50vw;
-        max-height: 50vh;
+        max-width: 80%;
+        max-height: 50%;
         border-radius: 7px;
         border-style: solid;
         border-color: var(--border-color);
         border-radius: 7px;
+        border-width: 2px;
     }
     table {
+        padding: 5px;
         background: var(--container-color);
-        padding: 10px;
         border-radius: 7px;
         border-style: solid;
         border-color: var(--border-color);
+        border-width: 2px;
     }
     th, td {
-        padding: 3px;
+        padding: 3px 5px 5px 3px;
         border-width: 0;
         border-bottom: 1px solid var(--border-color);
     }
@@ -80,6 +94,7 @@ DEFAULT_CSS = """
     p:hover {
         background: var(--hover-color);
         border-color: var(--border-color);
+        border-width: 2px;
     }
 </style>
 """

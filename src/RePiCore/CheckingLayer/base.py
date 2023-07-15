@@ -87,7 +87,7 @@ class InRange(WithCheck):
         checked_value: float,
         max_value: float,
         min_value: float,
-        description: str,
+        description: Optional[str] = None,
         max_inclusive: bool = True,
         min_inclusive: bool = True,
     ):
@@ -105,6 +105,13 @@ class InRange(WithCheck):
         self.min_value = min_value
         self.max_inclusive = max_inclusive
         self.min_inclusive = min_inclusive
+
+        if self.description is None:
+            lower = "<" if self.min_inclusive else "("
+            upper = ">" if self.max_inclusive else ")"
+            self.description = (
+                f"Check if in range {lower}{self.min_value}, {self.max_value}{upper}."
+            )
 
     def check(self) -> None:
         mx = None

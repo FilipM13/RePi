@@ -15,7 +15,8 @@ class ReportElement:
 
     def render(self) -> str:
         assert self.render_object is not None
-        template = Environment(loader=BaseLoader()).from_string(self.render_template)  # type: ignore [arg-type]
+        assert self.render_template is not None
+        template = Environment(loader=BaseLoader()).from_string(self.render_template)
         rv = template.render(object=self.render_object)
         return rv
 
@@ -51,6 +52,7 @@ class WithCheck(ReportElement):
         )
 
     def render(self) -> str:
+        self.check()
         self.render_object = Object(
             status=self.status,
             name=self.name,
@@ -165,6 +167,11 @@ class Table(ReportElement):
         rv = self.data.dataframe.to_html(index=self.index)
         self.render_object = Object(html=re.sub(r"(style|border|class)=(.)+>", ">", rv))
 
+    def render(self) -> str:
+        self.to_html()
+        rv = super().render()
+        return rv
+
 
 class Graphical(ReportElement):
     def __init__(self, render_template: Optional[str] = None) -> None:
@@ -249,7 +256,7 @@ class ScatterPlot(Graphical):
         self.render_object = Object(id=self.id, series=[])
         for i, ser in enumerate(self.series):
             _s_ = {
-                "name": ser,
+                "name": ser[1],
                 "x": str(list(self.data.dataframe[ser[0]])),
                 "y": str(list(self.data.dataframe[ser[1]])),
             }

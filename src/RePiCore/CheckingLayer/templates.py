@@ -12,7 +12,7 @@ WITHCHECK = """
 
 TABLE = """
 <div class="table_container">
-    {{TABLE}}
+    {{object.html}}
 </div>
 """
 
@@ -25,10 +25,10 @@ HISTOGRAM = """
     {% set series = object.series %}
     {% for ser in series %}
         {
-            x: [ser.x],
-            name: "ser.name",
+            x: {{ser.x}},
+            name: "{{ser.name}}",
             type: "histogram",
-            {% if 'color' in ser %} color: rgba{{ser.color}}{% endif %}
+            {% if 'color' in ser %} marker: {color: "rgba{{ser.color}}"},{% endif %}
         },
     {% endfor %}
     ]
@@ -44,17 +44,17 @@ HISTOGRAM = """
 SCATTERPLOT = """
 <div id="{{object.id}}" class="graph_container"></div>
 <script>
-    target = document.getElementById('{{object.id}}');
+    target = document.getElementById("{{object.id}}");
 
     data = [
     {% for ser in object.series %}
         {
-            x: ser.x,
-            y: ser.y,
-            name: "ser.name",
+            x: {{ser.x}},
+            y: {{ser.y}},
+            name: "{{ser.name}}",
             mode: "markers",
             type: "scatter",
-            {% if 'color' in ser %} color: rgba{{ser.color}}{% endif %}
+            {% if 'color' in ser %} marker: {color: "rgba{{ser.color}}"}, {% endif %}
         },
     {% endfor %}
     ]

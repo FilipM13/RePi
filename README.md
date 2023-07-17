@@ -27,8 +27,8 @@ Action table:
    1. basic diagram :white_check_mark:
    2. creating classes :hammer:
    3. testing classes :arrow_forward:
-   4. creating sample pipelines
-   5. testing pipelines
+   4. creating sample pipelines :arrow_forward:
+   5. testing pipelines :arrow_forward:
    6. documenting module
 3. Developing RePiReader 
 (<a href="https://github.com/FilipM13/RePi/milestone/3">milestone<a/>):

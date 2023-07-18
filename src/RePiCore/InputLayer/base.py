@@ -2,6 +2,8 @@ from typing import Union, List, Dict, Literal, Optional, Any
 import re
 import pandas as pd
 
+from RePiCore.utils.decorators import MarkIO
+
 BaseClasses = Union[str, float, int, bool]
 
 
@@ -27,6 +29,7 @@ class Source:
         )
 
 
+@MarkIO(inputs=[Union[BaseClasses, List[BaseClasses]]], outputs=[])
 class SingleValues(Source):
     __base_classes__ = (str, float, int, bool)
 
@@ -58,6 +61,7 @@ class TableLike(Source):
         return self.dataframe
 
 
+@MarkIO(inputs=[Literal["postgre", "mysql"], str, str, str, str], outputs=[])
 class FromDataBase(TableLike):
     def __init__(
         self,
@@ -74,6 +78,7 @@ class FromDataBase(TableLike):
         pass
 
 
+@MarkIO(inputs=[str], outputs=[])
 class FromFile(TableLike):
     def __init__(self, path: str):
         super().__init__()
@@ -85,9 +90,13 @@ class FromFile(TableLike):
         super().read()
 
 
+@MarkIO(inputs=[str, Optional[str], Optional[Dict[str, Any]]], outputs=[])
 class FromCsv(FromFile):
     def __init__(
-        self, path: str, delimiter: str = ",", options: Optional[Dict[str, Any]] = None
+        self,
+        path: str,
+        delimiter: Optional[str] = ",",
+        options: Optional[Dict[str, Any]] = None,
     ):
         super().__init__(path)
         assert isinstance(delimiter, str)
@@ -109,6 +118,7 @@ class FromCsv(FromFile):
             )
 
 
+@MarkIO(inputs=[str, Optional[str]], outputs=[])
 class FromExcel(FromFile):
     def __init__(self, path: str, sheet: Optional[str] = None):
         super().__init__(path)
@@ -122,6 +132,7 @@ class FromExcel(FromFile):
             self.dataframe = pd.read_excel(self.path, sheet_name=self.sheet)
 
 
+@MarkIO(inputs=[str, str, List[str]], outputs=[])
 class FromJson(FromFile):
     def __init__(self, path: str, per_line_regex: str, headers: List[str]):
         super().__init__(path)

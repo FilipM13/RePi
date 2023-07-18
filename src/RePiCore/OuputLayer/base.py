@@ -4,6 +4,7 @@ import pandas as pd
 from bs4 import BeautifulSoup as bs
 
 from RePiCore.CheckingLayer.base import ReportElement, Table
+from RePiCore.utils.decorators import MarkIO
 
 from .addons import DEFAULT_CSS, DEFAULT_JS, HEAD_INCLUDE
 from .templates import DEFAULT_HTML
@@ -17,14 +18,20 @@ class Report:
         raise NotImplementedError("generate not implemented.")
 
 
+MarkIO(
+    inputs=[str, List[ReportElement], Optional[str], Optional[str], Optional[str]],
+    outputs=[],
+)
+
+
 class HtmlFile(Report):
     def __init__(
         self,
         file_name: str,
         report_elements: List[ReportElement],
-        css: str = DEFAULT_CSS,
-        js: str = DEFAULT_JS,
-        head_include: str = HEAD_INCLUDE,
+        css: Optional[str] = DEFAULT_CSS,
+        js: Optional[str] = DEFAULT_JS,
+        head_include: Optional[str] = HEAD_INCLUDE,
     ) -> None:
         assert isinstance(file_name, str)
         assert file_name.endswith(".html")
@@ -54,6 +61,12 @@ class HtmlFile(Report):
         report_content = bs(report_content, "html.parser").prettify()
         with open(self.file_name, "w") as f:
             f.write(report_content)
+
+
+MarkIO(
+    inputs=[str, List[Table], Optional[List[str]]],
+    outputs=[],
+)
 
 
 class ExcelFile(Report):
@@ -86,6 +99,12 @@ class ExcelFile(Report):
         writer.close()
 
 
+MarkIO(
+    inputs=[str, Table],
+    outputs=[],
+)
+
+
 class CsvFile(Report):
     def __init__(
         self,
@@ -101,6 +120,12 @@ class CsvFile(Report):
 
     def generate(self) -> None:
         self.table.data.dataframe.to_csv(self.file_name)
+
+
+MarkIO(
+    inputs=[str, Table],
+    outputs=[],
+)
 
 
 class JsonFile(Report):

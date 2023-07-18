@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Type
 
 
 class MarkIO(object):
@@ -17,11 +17,11 @@ class MarkIO(object):
     {... '__inputs__': [<class 'str'>], '__outputs__': [<class 'int'>]}
     """
 
-    def __init__(self, inputs: List[type], outputs: List[type]) -> None:
+    def __init__(self, inputs: List[object], outputs: List[object]) -> None:
         self.__inputs__ = inputs
         self.__outputs__ = outputs
 
-    def __call__(self, cls: type) -> type:
-        cls.__setattr__("__inputs__", self.__inputs__)
-        cls.__setattr__("__outputs__", self.__outputs__)
+    def __call__(self, cls: Type) -> Type:
+        cls.__inputs__ = self.__inputs__
+        cls.__outputs__ = self.__outputs__
         return cls

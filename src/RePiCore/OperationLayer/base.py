@@ -2,6 +2,7 @@ from typing import Dict, Callable, Any, Literal, List, Optional
 import pandas as pd
 
 from RePiCore.InputLayer.base import TableLike, SingleValues
+from RePiCore.utils.decorators import MarkIO
 
 
 class Operation:
@@ -16,6 +17,10 @@ class Operation:
         )
 
 
+@MarkIO(
+    inputs=[TableLike, SingleValues, Dict[str, Callable[[Any, SingleValues], bool]]],
+    outputs=[TableLike],
+)
 class Filter(Operation):
     def __init__(
         self,
@@ -42,6 +47,7 @@ class Filter(Operation):
         return TableLike(return_df)
 
 
+@MarkIO(inputs=[TableLike, str, str], outputs=[TableLike])
 class ColumnCompareMatrix(Operation):
     def __init__(self, data: TableLike, column1: str, column2: str):
         assert isinstance(data, TableLike)
@@ -70,6 +76,7 @@ class ColumnCompareMatrix(Operation):
         return rv
 
 
+@MarkIO(inputs=[List[TableLike]], outputs=[TableLike])
 class Stack(Operation):
     def __init__(self, data: List[TableLike]):
         assert all([isinstance(d, TableLike) for d in data])
@@ -83,6 +90,15 @@ class Stack(Operation):
         return rv
 
 
+@MarkIO(
+    inputs=[
+        TableLike,
+        TableLike,
+        Literal["inner", "outer", "left", "right", "cross"],
+        Optional[str],
+    ],
+    outputs=[TableLike],
+)
 class Merge(Operation):
     def __init__(
         self,
@@ -110,6 +126,7 @@ class Merge(Operation):
         return rv
 
 
+@MarkIO(inputs=[TableLike, str], outputs=[TableLike])
 class CountValues(Operation):
     def __init__(self, data: TableLike, column: str):
         assert isinstance(data, TableLike)
@@ -131,6 +148,7 @@ class ColumnTransform(Operation):
         self.data = data
 
 
+@MarkIO(inputs=[TableLike, Dict[str, str]], outputs=[TableLike])
 class Rename(ColumnTransform):
     def __init__(self, data: TableLike, names: Dict[str, str]):
         super().__init__(data=data)
@@ -147,6 +165,7 @@ class Rename(ColumnTransform):
         return rv
 
 
+@MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
 class Drop(ColumnTransform):
     def __init__(self, data: TableLike, names: List[str]):
         super().__init__(data=data)
@@ -162,6 +181,7 @@ class Drop(ColumnTransform):
         return rv
 
 
+@MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
 class Order(ColumnTransform):
     def __init__(self, data: TableLike, names: List[str]):
         super().__init__(data=data)
@@ -181,6 +201,7 @@ class Order(ColumnTransform):
         return rv
 
 
+@MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
 class Maintain(ColumnTransform):
     def __init__(self, data: TableLike, names: List[str]):
         super().__init__(data=data)
@@ -196,6 +217,7 @@ class Maintain(ColumnTransform):
         return rv
 
 
+@MarkIO(inputs=[TableLike], outputs=[Dict[Literal["rows", "columns"], int]])
 class Size(Operation):
     def __init__(self, data: TableLike):
         assert isinstance(data, TableLike)

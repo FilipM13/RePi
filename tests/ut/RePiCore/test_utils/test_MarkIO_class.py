@@ -1,5 +1,6 @@
 from RePiCore.utils.decorators import MarkIO
 
+
 def test_work():
 
     @MarkIO(

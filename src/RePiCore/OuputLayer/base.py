@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup as bs
 from RePiCore.CheckingLayer.base import ReportElement, Table
 from RePiCore.utils.decorators import MarkIO
 
-from .addons import DEFAULT_CSS, DEFAULT_JS, HEAD_INCLUDE
-from .templates import DEFAULT_HTML
+from .addons import Style
+from .templates import DEFAULT_HTML, DEFAULT_JS, HEAD_INCLUDE
 
 
 class Report:
@@ -29,13 +29,13 @@ class HtmlFile(Report):
         self,
         file_name: str,
         report_elements: List[ReportElement],
-        css: Optional[str] = DEFAULT_CSS,
+        css: Optional[Style] = Style(),
         js: Optional[str] = DEFAULT_JS,
         head_include: Optional[str] = HEAD_INCLUDE,
     ) -> None:
         assert isinstance(file_name, str)
         assert file_name.endswith(".html")
-        assert isinstance(css, str)
+        assert isinstance(css, Style)
         assert isinstance(js, str)
         assert isinstance(head_include, str)
         assert isinstance(report_elements, list)
@@ -43,7 +43,7 @@ class HtmlFile(Report):
 
         self.file_name = file_name
         self.render_template = DEFAULT_HTML
-        self.css = css
+        self.css = css.render()
         self.js = js
         self.head_include = head_include
         self.report_elements = report_elements

@@ -13,11 +13,11 @@ class Style:
         container_color: str = "#c6e9f0",
         background_color: str = "#ebf0f6",
     ) -> None:
-        assert re.fullmatch(r"#[a-zA-Z0-9]{6}", border_color)
-        assert re.fullmatch(r"#[a-zA-Z0-9]{6}", hover_color)
-        assert re.fullmatch(r"#[a-zA-Z0-9]{6}", header_color)
-        assert re.fullmatch(r"#[a-zA-Z0-9]{6}", container_color)
-        assert re.fullmatch(r"#[a-zA-Z0-9]{6}", background_color)
+        assert re.fullmatch(r"#[a-fA-F0-9]{6}", border_color)
+        assert re.fullmatch(r"#[a-fA-F0-9]{6}", hover_color)
+        assert re.fullmatch(r"#[a-fA-F0-9]{6}", header_color)
+        assert re.fullmatch(r"#[a-fA-F0-9]{6}", container_color)
+        assert re.fullmatch(r"#[a-fA-F0-9]{6}", background_color)
 
         self.render_template = DEFAULT_CSS
         self.border_color = border_color

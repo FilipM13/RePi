@@ -68,6 +68,7 @@ DEFAULT_CSS = """
         margin-top: 10px;
         max-width: 100%;
         max-height: 100%;
+        overflow: scroll;
     }
     .graph_container{
         padding: 10px;

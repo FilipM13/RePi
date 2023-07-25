@@ -34,8 +34,9 @@ class Filter(Operation):
         self.data = data
         self.values = values
         self.filters = filters
+        self.output: Optional[TableLike] = None
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         __filters__ = []
         source_df = self.data.get_data()
         for k, f in self.filters.items():
@@ -44,7 +45,7 @@ class Filter(Operation):
         _filters_ = pd.DataFrame({str(n): f for n, f in enumerate(__filters__)})
         filters = _filters_.apply(all, axis=1)
         return_df = source_df.loc[filters]
-        return TableLike(return_df)
+        self.output = TableLike(return_df)
 
 
 @MarkIO(inputs=[TableLike, str, str], outputs=[TableLike])
@@ -58,8 +59,9 @@ class ColumnCompareMatrix(Operation):
         self.data = data
         self.column1 = column1
         self.column2 = column2
+        self.output: Optional[TableLike] = None
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         unique1 = list(self.data.dataframe[self.column1].unique())
         unique2 = list(self.data.dataframe[self.column2].unique())
         rv_records: Dict[str, Dict[str, int]] = dict()
@@ -73,7 +75,7 @@ class ColumnCompareMatrix(Operation):
                 rv_records[u1][u2] = count
         rv_df = pd.DataFrame(rv_records)
         rv = TableLike(rv_df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[List[TableLike]], outputs=[TableLike])
@@ -81,13 +83,14 @@ class Stack(Operation):
     def __init__(self, data: List[TableLike]):
         assert all([isinstance(d, TableLike) for d in data])
         self.data = data
+        self.output: Optional[TableLike] = None
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         rv_df = pd.concat(
             [*[d.dataframe for d in self.data]], ignore_index=True, axis=0
         )
         rv = TableLike(rv_df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(
@@ -117,13 +120,14 @@ class Merge(Operation):
         self.data2 = data2
         self.on = on
         self.how = how
+        self.output: Optional[TableLike] = None
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         rv_df = self.data1.dataframe.merge(
             self.data2.dataframe, how=self.how, on=self.on
         )
         rv = TableLike(rv_df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[TableLike, str], outputs=[TableLike])
@@ -134,18 +138,20 @@ class CountValues(Operation):
         assert column in data.dataframe.columns
         self.data = data
         self.column = column
+        self.output: Optional[TableLike] = None
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         rv_s = self.data.dataframe[self.column].value_counts()
         rv_df = pd.DataFrame(rv_s)
         rv = TableLike(rv_df)
-        return rv
+        self.output = rv
 
 
 class ColumnTransform(Operation):
     def __init__(self, data: TableLike):
         assert isinstance(data, TableLike)
         self.data = data
+        self.output: Optional[TableLike] = None
 
 
 @MarkIO(inputs=[TableLike, Dict[str, str]], outputs=[TableLike])
@@ -159,10 +165,10 @@ class Rename(ColumnTransform):
         assert all([v in self.data.dataframe.columns for v in names.values()])
         self.names = names
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         df = self.data.dataframe.rename(columns=self.names)
         rv = TableLike(df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
@@ -175,10 +181,10 @@ class Drop(ColumnTransform):
         assert all([v in self.data.dataframe.columns for v in names])
         self.names = names
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         df = self.data.dataframe.drop(columns=self.names)
         rv = TableLike(df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
@@ -191,14 +197,14 @@ class Order(ColumnTransform):
         assert all([v in self.data.dataframe.columns for v in names])
         self.names = names
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         cols = list(self.data.dataframe.columns)
         for n in self.names:
             cols.remove(n)
         self.names.extend(cols)
         df = self.data.dataframe[self.names]
         rv = TableLike(df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[TableLike, List[str]], outputs=[TableLike])
@@ -211,10 +217,10 @@ class Maintain(ColumnTransform):
         assert all([v in self.data.dataframe.columns for v in names])
         self.names = names
 
-    def execute(self) -> TableLike:
+    def execute(self) -> None:
         df = self.data.dataframe[self.names]
         rv = TableLike(df)
-        return rv
+        self.output = rv
 
 
 @MarkIO(inputs=[TableLike], outputs=[Dict[Literal["rows", "columns"], int]])
@@ -222,10 +228,11 @@ class Size(Operation):
     def __init__(self, data: TableLike):
         assert isinstance(data, TableLike)
         self.data = data
+        self.output: Optional[Dict[str, int]] = None
 
-    def execute(self) -> Dict[Literal["rows", "columns"], int]:
+    def execute(self) -> None:
         shape = self.data.dataframe.shape
         rows = shape[0]
         columns = shape[1]
         rv = {"rows": rows, "columns": columns}
-        return rv  # type: ignore [return-value]
+        self.output = rv

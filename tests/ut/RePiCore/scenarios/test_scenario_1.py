@@ -22,17 +22,20 @@ def test_scenario():
         'col1': lambda x, sv: x < sv.col1_upper_threshold,
         'col2': lambda x, sv: x > sv.col2_lower_threshold,
         'col3': lambda x, sv: x > sv.col3_lower_threshold,
-    }).execute()
+    })
+    filter1.execute()
 
-    filter1_size = OL.Size(filter1).execute()
+    filter1_size = OL.Size(filter1.output)
+    filter1_size.execute()
 
-    matrix1 = OL.ColumnCompareMatrix(in1, column1='col2', column2='col3').execute()
+    matrix1 = OL.ColumnCompareMatrix(in1, column1='col2', column2='col3')
+    matrix1.execute()
 
     # checks
     header = CL.Plain('This is sample scenario1!', 'h1')
-    size_check = CL.InRange('Size check', filter1_size['rows'], 50, 2)
-    table_matrix = CL.Table(matrix1)
-    filter_table = CL.Table(filter1, False)
+    size_check = CL.InRange('Size check', filter1_size.output['rows'], 50, 2)
+    table_matrix = CL.Table(matrix1.output)
+    filter_table = CL.Table(filter1.output, False)
     hist1 = CL.Histogram(in1, ['col1', 'col2'], ['(0,0,255,0.5)', '(255,0,0,0.5)'])
 
     # report

@@ -1,11 +1,15 @@
 from typing import Literal, Any, List, Optional, Tuple
 import re
-from jinja2 import Environment, BaseLoader
 
 from RePiCore.InputLayer.base import TableLike
 
 from .addons import Pass, Fail, Neutral, Object
-from .templates import PLAIN, WITHCHECK, TABLE, SCATTERPLOT, HISTOGRAM
+
+PLAIN = "plain.jinja2"
+WITHCHECK = "withcheck.jinja2"
+TABLE = "table.jinja2"
+SCATTERPLOT = "scatterplot.jinja2"
+HISTOGRAM = "histogram.jinja2"
 
 
 class ReportElement:
@@ -13,12 +17,9 @@ class ReportElement:
         self.render_object: Optional[Object] = None
         self.render_template = render_template
 
-    def render(self) -> str:
+    def render(self) -> None:
         assert self.render_object is not None
         assert self.render_template is not None
-        template = Environment(loader=BaseLoader()).from_string(self.render_template)
-        rv = template.render(object=self.render_object)
-        return rv
 
 
 class Plain(ReportElement):
@@ -51,7 +52,7 @@ class WithCheck(ReportElement):
             f"Method check not implemented in class {self.__class__}."
         )
 
-    def render(self) -> str:
+    def render(self) -> None:
         self.check()
         self.render_object = Object(
             status=self.status,
@@ -59,8 +60,7 @@ class WithCheck(ReportElement):
             checked_value=self.checked_value,
             description=self.description,
         )
-        rv = super().render()
-        return rv
+        super().render()
 
 
 class Equals(WithCheck):
@@ -174,10 +174,9 @@ class Table(ReportElement):
         rv = self.data.dataframe.to_html(index=self.index)
         self.render_object = Object(html=re.sub(r"(style|border|class)=(.)+>", ">", rv))
 
-    def render(self) -> str:
+    def render(self) -> None:
         self.to_html()
-        rv = super().render()
-        return rv
+        super().render()
 
 
 class Graphical(ReportElement):
@@ -190,10 +189,9 @@ class Graphical(ReportElement):
             f"Method create_object not implemented in class {self.__class__}."
         )
 
-    def render(self) -> str:
+    def render(self) -> None:
         self.create_element()
-        rv = super().render()
-        return rv
+        super().render()
 
 
 class Histogram(Graphical):

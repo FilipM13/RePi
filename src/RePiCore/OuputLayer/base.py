@@ -1,13 +1,14 @@
 from typing import List, Optional
-from jinja2 import Environment, BaseLoader
+from jinja2 import Environment, FileSystemLoader
 import pandas as pd
 from bs4 import BeautifulSoup as bs
 
 from RePiCore.CheckingLayer.base import ReportElement, Table
 from RePiCore.utils.decorators import MarkIO
+import RePiCore.templates as RePiTemplates
 
 from .addons import Style
-from .templates import DEFAULT_HTML, DEFAULT_JS, HEAD_INCLUDE
+from .templates import DEFAULT_JS, HEAD_INCLUDE
 
 
 class Report:
@@ -42,15 +43,23 @@ class HtmlFile(Report):
         assert all([isinstance(r, ReportElement) for r in report_elements])
 
         self.file_name = file_name
-        self.render_template = DEFAULT_HTML
-        self.css = css.render()
+        self.render_template = "html.jinja2"
+        self.css = css
         self.js = js
         self.head_include = head_include
         self.report_elements = report_elements
 
     def generate(self) -> None:
-        html_elements = [reel.render() for reel in self.report_elements]
-        template = Environment(loader=BaseLoader()).from_string(self.render_template)
+        # html_elements = [reel.render() for reel in self.report_elements]
+        for reel in self.report_elements:
+            reel.render()
+        html_elements = self.report_elements
+        print(html_elements)
+        print(self.css)
+        # template = Environment(loader=BaseLoader()).from_string(self.render_template)
+        template = Environment(
+            loader=FileSystemLoader(RePiTemplates.__file__.removesuffix("__init__.py"))
+        ).get_template("html.jinja2")
         report_content = template.render(
             TITLE=self.file_name.removesuffix(".html"),
             CSS=self.css,

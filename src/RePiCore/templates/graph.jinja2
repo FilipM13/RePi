@@ -1,0 +1,18 @@
+<div id="{{object.id}}" class="graph_container"></div>
+<script>
+    target = document.getElementById('{{object.id}}');
+
+    data = [
+    {%- for ser in object.series %}
+        {% with object=ser %}
+            {% include object.render_template %}
+        {% endwith %}
+    {%- endfor %}
+    ]
+
+    {% with object=object.layout %}
+        {% include object.render_template %}
+    {% endwith %}
+
+    Plotly.newPlot(target, data, layout);
+</script>

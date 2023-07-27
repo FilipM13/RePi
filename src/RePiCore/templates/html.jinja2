@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{TITLE}}</title>
+    <style>
+        {% with object=CSS %}
+            {% include object.render_template %}
+        {% endwith %}
+    </style>
+    {{JS}}
+    {{HEAD_INCLUDE}}
+</head>
+<body>
+    <h1 class="title">{{TITLE}}</>
+    {% for RE in REPORT_ELEMENTS %}
+        {% with object=RE.render_object %}
+            {% include RE.render_template %}
+        {% endwith %}
+    {% endfor %}
+</body>
+</html>

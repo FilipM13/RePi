@@ -17,5 +17,7 @@ if __name__ == '__main__':
             exclude=['tests']
         ),
         package_dir={'': 'src'},
-        python_requires='>=3.9'
+        python_requires='>=3.9',
+        package_data={'': ['*.jinja2']},
+        include_package_data=True,
     )

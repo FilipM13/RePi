@@ -53,14 +53,6 @@ test_cases = {
             checks.InRange('test in range', 5, 6, 0, 'checks if in <0, 6>'),
             checks.NotInRange('test not in range', 5, 6, 0, 'checks if not in <0, 6>'),
             checks.Table(table),
-            # checks.ScatterPlot(scatter, [('x data', 'y data 1')]),
-            # checks.ScatterPlot(scatter, [('x data', 'y data 1'), ('x data', 'y data 2')]),
-            # checks.ScatterPlot(scatter, [('x data', 'y data 1'), ('x data', 'y data 2')], ['(255,100,0,1)', '(0,255,255,1)']),
-            # checks.Histogram(histogram, ['serie 1'], ['(255,0,0,0.3)']),
-            # checks.Histogram(histogram, ['serie 1', 'serie 2'], ['(255,0,0,0.3)', '(0,255,0,0.3)']),
-            # checks.Histogram(histogram, ['serie 1', 'serie 2', 'serie 3'], ['(255,0,0,0.3)', '(0,255,0,0.3)', '(0,0,255,0.3)']),
-            # checks.Histogram(histogram, ['serie 1']),
-            # checks.Histogram(histogram, ['serie 1', 'serie 2', 'serie 3']),
         ])
     ]
 }

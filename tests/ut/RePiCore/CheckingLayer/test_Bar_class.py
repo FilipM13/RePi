@@ -1,16 +1,15 @@
 import pytest
 
-from RePiCore.CheckingLayer.base import Scatter
+from RePiCore.CheckingLayer.base import Bar
 
 test_cases = {
-    'arguments': 'x, y, name, mode, color',
+    'arguments': 'x, y, name, color',
     'cases': [
         (
-            [1, 2, 3, 4, 1, 1, 1, 1],
-            [2, 2, 3, 4, 1, 1, 1, 2],
-            'test series',
-            'lines',
-            '#ff9900'
+            ['a1', 'a2', 'a3', 'a4', 'a5', 'a6'],
+            [5, 9, 2, 0, -5, 10],
+            'random bar',
+            '#00ffaa'
         )
     ]
 }
@@ -20,12 +19,11 @@ test_cases = {
     test_cases['arguments'],
     test_cases['cases']
 )
-def test_init(x, y, name, mode, color):
-    Scatter(
+def test_init(x, y, name, color):
+    Bar(
         x=x,
         y=y,
         name=name,
-        mode=mode,
         color=color
     )
 
@@ -34,12 +32,11 @@ def test_init(x, y, name, mode, color):
     test_cases['arguments'],
     test_cases['cases']
 )
-def test_render(x, y, name, mode, color):
-    o = Scatter(
+def test_render(x, y, name, color):
+    o = Bar(
         x=x,
         y=y,
         name=name,
-        mode=mode,
         color=color
     )
     o.render()

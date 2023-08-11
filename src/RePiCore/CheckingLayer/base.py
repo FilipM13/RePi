@@ -1,4 +1,4 @@
-from typing import Literal, Any, List, Optional, Tuple
+from typing import Literal, Any, List, Optional
 import re
 
 from RePiCore.InputLayer.base import TableLike
@@ -179,92 +179,87 @@ class Table(ReportElement):
         super().render()
 
 
-class Graphical(ReportElement):
-    def __init__(self, render_template: Optional[str] = None) -> None:
-        super().__init__(render_template=render_template)
-        self.id = id(self)
+class Series(ReportElement):
+    pass
 
-    def create_element(self) -> None:
-        raise NotImplementedError(
-            f"Method create_object not implemented in class {self.__class__}."
-        )
+
+class Bar(Series):
+    render_template = "bar.jinja2"
+
+    def __init__(self, x: List[Any], y: List[Any], name: str, color: Optional[str]):
+        self.x = x
+        self.y = y
+        self.name = name
+        self.color = color
+        self.type = "bar"
 
     def render(self) -> None:
-        self.create_element()
-        super().render()
+        self.render_object = Object(
+            x=self.x, y=self.y, name=self.name, color=self.color, type=self.type
+        )
 
 
-class Histogram(Graphical):
+class Histogram(Series):
+    render_template = "histogram.jinja2"
+
+    def __init__(self, x: List[Any], name: str, color: Optional[str]):
+        self.x = x
+        self.name = name
+        self.color = color
+        self.type = "histogram"
+
+    def render(self) -> None:
+        self.render_object = Object(
+            x=self.x, name=self.name, color=self.color, type=self.type
+        )
+
+
+class Scatter(Series):
+    render_template = "scatter.jinja2"
+
     def __init__(
         self,
-        data: TableLike,
-        series: List[str],
-        colors: Optional[List[str]] = None,
+        x: List[Any],
+        y: List[Any],
+        name: str,
+        mode: Literal["markers", "lines", "markers+lines"],
+        color: Optional[str],
     ):
-        super().__init__(render_template=HISTOGRAM)
-        assert isinstance(data, TableLike)
-        assert isinstance(series, list)
-        assert all([isinstance(s, str) for s in series])
-        assert all([s in data.dataframe.columns for s in series])
-        if colors is not None:
-            assert isinstance(colors, list)
-            assert len(colors) == len(series)
-            assert all([isinstance(c, str) for c in colors])
-            assert all(
-                [
-                    re.fullmatch(r"\(\d{1,3},\d{1,3},\d{1,3},\d(?:\.\d*)?\)", c)
-                    for c in colors
-                ]
-            )
-        self.data = data
+        self.x = x
+        self.y = y
+        self.name = name
+        self.mode = mode
+        self.color = color
+        self.type = "markers"
+
+    def render(self) -> None:
+        self.render_object = Object(
+            x=self.x,
+            y=self.y,
+            name=self.name,
+            mode=self.mode,
+            color=self.color,
+            type=self.type,
+        )
+
+
+class Layout(ReportElement):
+    render_template = "layout.jinja2"
+    pass
+
+
+class Graph(ReportElement):
+    render_template = "graph.jinja2"
+
+    def __init__(self, name: str, series: List[Series], layout: Layout = Layout()):
         self.series = series
-        self.colors = colors
+        self.layout = layout
+        self.name = name
+        self.id = id(self)
 
-    def create_element(self) -> None:
-        self.render_object = Object(id=self.id, series=[])
-        for i, ser in enumerate(self.series):
-            _s_ = {"name": ser, "x": str(list(self.data.dataframe[ser]))}
-            if self.colors is not None:
-                _s_["color"] = self.colors[i]
-            self.render_object.series.append(_s_)  # type: ignore [attr-defined]
-
-
-class ScatterPlot(Graphical):
-    def __init__(
-        self,
-        data: TableLike,
-        series: List[Tuple[str, str]],
-        colors: Optional[List[str]] = None,
-    ):
-        super().__init__(render_template=SCATTERPLOT)
-        assert isinstance(data, TableLike)
-        assert isinstance(series, list)
-        assert all([isinstance(s, tuple) for s in series])
-        for ser in series:
-            assert len(ser) == 2
-            assert all([isinstance(s, str) for s in ser])
-        if colors is not None:
-            assert isinstance(colors, list)
-            assert all([isinstance(c, str) for c in colors])
-            assert len(colors) == len(series)
-            assert all(
-                [
-                    re.fullmatch(r"\(\d{1,3},\d{1,3},\d{1,3},\d(?:\.\d*)?\)", c)
-                    for c in colors
-                ]
-            )
-        self.data = data
-        self.series = series
-        self.colors = colors
-
-    def create_element(self) -> None:
-        self.render_object = Object(id=self.id, series=[])
-        for i, ser in enumerate(self.series):
-            _s_ = {
-                "name": ser[1],
-                "x": str(list(self.data.dataframe[ser[0]])),
-                "y": str(list(self.data.dataframe[ser[1]])),
-            }
-            if self.colors is not None:
-                _s_["color"] = self.colors[i]
-            self.render_object.series.append(_s_)  # type: ignore [attr-defined]
+    def render(self) -> None:
+        for ser in self.series:
+            ser.render()
+        self.render_object = Object(
+            series=self.series, layout=self.layout, name=self.name, id=self.id
+        )

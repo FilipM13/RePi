@@ -54,8 +54,6 @@ class HtmlFile(Report):
         for reel in self.report_elements:
             reel.render()
         html_elements = self.report_elements
-        print(html_elements)
-        print(self.css)
         # template = Environment(loader=BaseLoader()).from_string(self.render_template)
         template = Environment(
             loader=FileSystemLoader(RePiTemplates.__file__.removesuffix("__init__.py"))

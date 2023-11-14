@@ -1,18 +1,18 @@
 <div id="{{object.id}}" class="graph_container"></div>
 <script>
-    target = document.getElementById('{{object.id}}');
+target = document.getElementById('{{object.id}}');
 
-    data = [
-    {%- for ser in object.series %}
-        {% with object=ser %}
-            {% include object.render_template %}
-        {% endwith %}
-    {%- endfor %}
-    ]
+data = [
+{%- for ser in object.series %}
+{% with object=ser.render_object %}
+{% include ser.render_template %}
+{% endwith %}
+{%- endfor %}
+]
 
-    {% with object=object.layout %}
-        {% include object.render_template %}
-    {% endwith %}
+{% with ly=object.layout.render_object %}
+{% include ly.render_template %}
+{% endwith %}
 
-    Plotly.newPlot(target, data, layout);
+Plotly.newPlot(target, data, layout);
 </script>

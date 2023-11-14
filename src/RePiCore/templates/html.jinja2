@@ -12,7 +12,7 @@
     {{HEAD_INCLUDE}}
 </head>
 <body>
-    <h1 class="title">{{TITLE}}</>
+    <h1 class="title">{{TITLE}}</h1>
     {% for RE in REPORT_ELEMENTS %}
         {% with object=RE.render_object %}
             {% include RE.render_template %}

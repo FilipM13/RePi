@@ -104,7 +104,7 @@ class ExcelFile(Report):
             sheet_name = (
                 self.sheet_names[i] if self.sheet_names is not None else f"sheet{i}"
             )
-            table.data.dataframe.to_excel(writer, sheet_name=sheet_name)
+            table.data.to_excel(writer, sheet_name=sheet_name)
         writer.close()
 
 
@@ -128,7 +128,7 @@ class CsvFile(Report):
         self.table = table
 
     def generate(self) -> None:
-        self.table.data.dataframe.to_csv(self.file_name)
+        self.table.data.to_csv(self.file_name)
 
 
 MarkIO(
@@ -151,4 +151,4 @@ class JsonFile(Report):
         self.table = table
 
     def generate(self) -> None:
-        self.table.data.dataframe.to_json(self.file_name)
+        self.table.data.to_json(self.file_name)

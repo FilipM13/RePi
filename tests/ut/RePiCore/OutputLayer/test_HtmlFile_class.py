@@ -4,26 +4,25 @@ import os
 
 from RePiCore.OuputLayer.base import HtmlFile
 import RePiCore.CheckingLayer.base as checks
-from RePiCore.InputLayer.base import TableLike
 
-table = TableLike(pd.DataFrame(
+table = pd.DataFrame(
     {
         'this': ['1', '2', '3', '4', '5', '6'],
         'is': [1, 2, 3, 4, 5, 6],
         'test': ['2023-07-15', '2023-07-16', '2023-07-17', '2023-07-18', '2023-07-19', '2023-07-20'],
         'table': [True, False, True, False, True, False],
     }
-))
+)
 
-scatter = TableLike(pd.DataFrame(
+scatter = pd.DataFrame(
     {
         'x data': [0, 0, 9, 9, 6, 6],
         'y data 1': [1, 2, 3, 4, 5, 6],
         'y data 2': [6, 5, 4, 3, 2, 1],
     }
-))
+)
 
-histogram = TableLike(pd.DataFrame(
+histogram = pd.DataFrame(
     {
         'serie 1': [
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 4, 4, 5, 6, 7, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9,
@@ -38,7 +37,7 @@ histogram = TableLike(pd.DataFrame(
             1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4
         ],
     }
-))
+)
 
 
 test_cases = {

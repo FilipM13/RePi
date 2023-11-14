@@ -1,42 +1,24 @@
 import os
+import pandas as pd
 
-import RePiCore.InputLayer.base as IL
-import RePiCore.OperationLayer.base as OL
 import RePiCore.CheckingLayer.base as CL
 import RePiCore.OuputLayer.base as RL
 
 
 def test_scenario():
-    # sources
-    svs = IL.SingleValues(
-        col1_upper_threshold=1,
-        col2_lower_threshold=0,
-        col3_lower_threshold=-1,
-    )
-    svs.read()
-    in1 = IL.FromCsv('tests/data/scenarios/scenario1/in1.csv')
-    in1.read()
-
-    # operations
-    filter1 = OL.Filter(in1, svs, filters={
-        'col1': lambda x, sv: x < sv.col1_upper_threshold,
-        'col2': lambda x, sv: x > sv.col2_lower_threshold,
-        'col3': lambda x, sv: x > sv.col3_lower_threshold,
-    })
-    filter1.execute()
-
-    filter1_size = OL.Size(filter1.output)
-    filter1_size.execute()
-
-    matrix1 = OL.ColumnCompareMatrix(in1, column1='col2', column2='col3')
-    matrix1.execute()
+    df1 = pd.read_csv('tests/data/data_sources/csv/1.csv')
+    df2 = pd.read_csv('tests/data/data_sources/csv/2.csv')
 
     # checks
     header = CL.Plain('This is sample scenario1!', 'h1')
-    size_check = CL.InRange('Size check', filter1_size.output['rows'], 50, 2)
-    table_matrix = CL.Table(matrix1.output)
-    filter_table = CL.Table(filter1.output, False)
-    hist1 = CL.Histogram(in1, ['col1', 'col2'], ['(0,0,255,0.5)', '(255,0,0,0.5)'])
+    size_check = CL.InRange('Size check', 10, 50, 2)
+    table_matrix = CL.Table(df1)
+    filter_table = CL.Table(df2, False)
+    hist1 = CL.Histogram(
+        [df1['column1'].tolist(), df1['column2'].tolist()],
+        ['col1', 'col2'],
+        ['(0,0,255,0.5)', '(255,0,0,0.5)']
+    )
 
     # report
     html = RL.HtmlFile('Scenario 1.html', [

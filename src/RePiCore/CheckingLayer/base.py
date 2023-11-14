@@ -1,7 +1,7 @@
 from typing import Literal, Any, List, Optional
 import re
 
-from RePiCore.InputLayer.base import TableLike
+import pandas as pd
 
 from .addons import Pass, Fail, Neutral, Object
 
@@ -13,6 +13,10 @@ HISTOGRAM = "histogram.jinja2"
 
 
 class ReportElement:
+    """
+    Parent class for all report elements.
+    """
+
     def __init__(self, render_template: Optional[str] = None) -> None:
         self.render_object: Optional[Object] = None
         self.render_template = render_template
@@ -23,6 +27,10 @@ class ReportElement:
 
 
 class Plain(ReportElement):
+    """
+    Plain html text element.
+    """
+
     ALLOWED_TAGS = ["h3", "h2", "h1", "p"]
 
     def __init__(self, text: str, tag: Literal["h3", "h2", "h1", "p"]):
@@ -36,6 +44,10 @@ class Plain(ReportElement):
 
 
 class WithCheck(ReportElement):
+    """
+    Parent class for all checked values of report.
+    """
+
     def __init__(self, name: str, description: Optional[str], checked_value: Any):
         super().__init__(WITHCHECK)
         assert isinstance(name, str)
@@ -64,6 +76,10 @@ class WithCheck(ReportElement):
 
 
 class Equals(WithCheck):
+    """
+    Check if input value is equal to expected value.
+    """
+
     def __init__(
         self, name: str, checked_value: Any, expected_value: Any, description: str
     ):
@@ -81,6 +97,10 @@ class Equals(WithCheck):
 
 
 class InRange(WithCheck):
+    """
+    Check if input value is in specific range of values.
+    """
+
     def __init__(
         self,
         name: str,
@@ -134,6 +154,10 @@ class InRange(WithCheck):
 
 
 class NotInRange(InRange):
+    """
+    Check if input value is outside specific range of values.
+    """
+
     def __init__(
         self,
         name: str,
@@ -163,23 +187,29 @@ class NotInRange(InRange):
 
 
 class Table(ReportElement):
-    def __init__(self, data: TableLike, index: bool = True):
+    """
+    Html table.
+    """
+
+    def __init__(self, data: pd.DataFrame, index: bool = True):
         super().__init__(render_template=TABLE)
-        assert isinstance(data, TableLike)
+        assert isinstance(data, pd.DataFrame)
         assert isinstance(index, bool)
         self.data = data
         self.index = index
 
-    def to_html(self) -> None:
-        rv = self.data.dataframe.to_html(index=self.index)
-        self.render_object = Object(html=re.sub(r"(style|border|class)=(.)+>", ">", rv))
-
     def render(self) -> None:
-        self.to_html()
+        rv = self.data.to_html(index=self.index)
+        destyled = re.sub(r"(style|border|class)=(.)+>", ">", rv)
+        self.render_object = Object(html=destyled)
         super().render()
 
 
 class Series(ReportElement):
+    """
+    Parent element for types of graphs.
+    """
+
     pass
 
 
@@ -244,11 +274,19 @@ class Scatter(Series):
 
 
 class Layout(ReportElement):
+    """
+    Plotly-like layout class. Currently, a placeholder.
+    """
+
     render_template = "layout.jinja2"
     pass
 
 
 class Graph(ReportElement):
+    """
+    Html graph element.
+    """
+
     render_template = "graph.jinja2"
 
     def __init__(self, name: str, series: List[Series], layout: Layout = Layout()):

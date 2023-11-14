@@ -30,6 +30,7 @@ class Plain(ReportElement):
     """
     Plain html text element.
     """
+
     render_template = "plain.jinja2"
 
     ALLOWED_TAGS = ["h3", "h2", "h1", "p"]
@@ -48,6 +49,7 @@ class WithCheck(ReportElement):
     """
     Parent class for all checked values of report.
     """
+
     render_template = "withcheck.jinja2"
 
     def __init__(self, name: str, description: Optional[str], checked_value: Any):
@@ -227,7 +229,12 @@ class Bar(Series):
 
     def render(self) -> None:
         self.render_object = Object(
-            render_template = "bar.jinja2", x=self.x, y=self.y, name=self.name, color=self.color, type=self.type
+            render_template="bar.jinja2",
+            x=self.x,
+            y=self.y,
+            name=self.name,
+            color=self.color,
+            type=self.type,
         )
 
 
@@ -242,7 +249,11 @@ class Histogram(Series):
 
     def render(self) -> None:
         self.render_object = Object(
-            render_template = "histogram.jinja2", x=self.x, name=self.name, color=self.color, type=self.type
+            render_template="histogram.jinja2",
+            x=self.x,
+            name=self.name,
+            color=self.color,
+            type=self.type,
         )
 
 

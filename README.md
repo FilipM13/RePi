@@ -25,11 +25,11 @@ Action table:
 (<a href="https://github.com/FilipM13/RePi/milestone/2">milestone<a/>): 
 :arrow_forward:
    1. basic diagram :white_check_mark:
-   2. creating classes :arrow_forward:
-   3. testing classes :arrow_forward:
-   4. creating sample pipelines
-   5. testing pipelines
-   6. documenting module
+   2. creating classes :white_check_mark:
+   3. testing classes :white_check_mark:
+   4. creating sample pipelines :white_check_mark:
+   5. testing pipelines :white_check_mark:
+   6. documenting module :arrow_forward:
 3. Developing RePiReader 
 (<a href="https://github.com/FilipM13/RePi/milestone/3">milestone<a/>):
 :no_entry:
